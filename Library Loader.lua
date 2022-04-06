@@ -119,7 +119,7 @@ module = {
             return Library
         end
     end,
-    ExternalLoad = function(url)
+    ExternalLoad = function(url,name)
         local url = url or ""
         local LibraryContent = gethttp(url)
         if LibraryContent == "ERROR" then
@@ -132,7 +132,7 @@ module = {
         if n_er then
             return Library
         end
-	print(Library)
+	print(modulename,Library)
     end,
     Load = function(modulename)
 	print("[Library Loader]Loading "..modulename)
@@ -149,8 +149,8 @@ module = {
             if ScriptFromRepo ~= "404: Not Found" then
 		local libraryloaded = cache[url]
 	        if not libraryloaded or libraryloaded ~= "" then
-		    cache[url] = module.ExternalLoad(url)
-		    print(module.ExternalLoad(url) or "No Module Load!")
+		    cache[url] = module.ExternalLoad(url,modulename)
+		    print(cache[url] or "No Module Load!")
 		    libraryloaded = cache[url]
 		end
 		if libraryloaded ~= nil then
