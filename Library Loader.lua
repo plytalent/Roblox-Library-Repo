@@ -47,6 +47,7 @@ module = {
         if n_er then
             return Library
         end
+	print(Library)
     end,
     Load = function(modulename)
 	print("[Library Loader]Loading "..modulename)
