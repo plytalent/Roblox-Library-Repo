@@ -1,6 +1,63 @@
-local print = rconsoleinfo or print
 local module
 local cache = {}
+
+local tostring
+local print
+
+function buffer.new()
+    local self = setmetatable({},buffer)
+    self.Buffer = {}
+    return self
+end
+
+function buffer:Read()
+    local newstr = ""
+    for i=1,#self.buffer do
+        newstr = newstr.. tostring(self.buffer[i])
+    end
+    return newstr
+end
+
+function buffer:Write(data)
+    self.buffer[#self.buffer+1] = data
+end
+
+tostring = function(input)
+    local typeofinput = typeof(input):lower()
+    if typeofinput == "instance" or typeofinput == "userdata" then
+        local can_get_name, name = pcall(function()
+            return input.Name
+        end)
+        if can_get_name then
+            return tostring(name)
+        end
+    elseif typeofinput == "table" then
+        local newbuffer = buffer.new()
+        newbuffer:Write("{")
+        newbuffer:Write("\n")
+        for index,value in pairs(input) do
+            newbuffer:Write(index)
+            newbuffer:Write(" = ")
+            newbuffer:Write(tostring(value))
+            newbuffer:Write(",")
+            newbuffer:Write("\n")
+        end
+        newbuffer:Write("}")
+        return newbuffer:Read()
+    end
+    return real_func["tostring"](input)
+end
+print = function(...)
+    if libsetting.loglevel > 0 then
+        local args = {...}
+        local buffer = buffer.new()
+        for i=1, #args do
+            buffer:Write(args[i])
+            buffer:Write("\t")
+        end
+        rconsoleinfo(buffer:Read())
+    end
+end
 
 function findvalue_in_table(value,tb)
     for _,v in pairs(tb) do
