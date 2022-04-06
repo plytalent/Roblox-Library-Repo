@@ -242,7 +242,7 @@ local err, return_result = pcall(function()
                     end
                 end,
                 _newindex  == function(self,index,value)
-                    if index ~= "ClassName" and index ~= "TextBounds" and (index == "_internal_var_" and rawget(rawget(self,"_internal_var_"),"lock")) then
+                    if index ~= "ClassName" and index ~= "TextBounds" and not (index == "_internal_var_" and rawget(rawget(self,"_internal_var_"),"lock")) then
                         if self.ClassName == "TextButton" or self.ClassName == "TextLabel" then
                             if index == "Text" then
                                 rawget(self,"_internal_var_").DrawingObject[index] = value
