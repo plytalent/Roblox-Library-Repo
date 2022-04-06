@@ -1,5 +1,6 @@
 local module
 local cache = {}
+
 local real_print = print
 local real_tostring = tostring
 local real_debug = debug
