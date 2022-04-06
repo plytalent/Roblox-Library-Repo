@@ -36,15 +36,10 @@ module = {
     end,
     ExternalLoad = function(url)
         local url = url or ""
-	if not cache[url] or cache[url] ~= "" then
-            local LibraryContent = gethttp(url)
-            if LibraryContent == "ERROR" then
-                print("[Library Loader][URL Loader]FAILED TO LOAD EXTERNAL LIB"..LibraryContent)
-                return
-            end
-	    cache[url] = LibraryContent
-	else
-	    LibraryContent = cache[url]
+        local LibraryContent = gethttp(url)
+        if LibraryContent == "ERROR" then
+            print("[Library Loader][URL Loader]FAILED TO LOAD EXTERNAL LIB"..LibraryContent)
+            return
         end
         local n_er, Library = pcall(function()
             return loadstring(LibraryContent)()
@@ -66,7 +61,12 @@ module = {
 	    local  url = "https://raw.githubusercontent.com/plytalent/Roblox-Library-Repo/main/"..modulename:gsub("%s+","%%20")..".lua"
             local ScriptFromRepo = gethttp(url)
             if ScriptFromRepo ~= "404: Not Found" then
-                return module.ExternalLoad(url)
+		local libraryloaded = cache[url]
+	        if not libraryloaded or libraryloaded ~= "" then
+		    cache[url] = module.ExternalLoad(url)
+		    libraryloaded = cache[url]
+		end
+                return libraryloaded
             else
                 rconsoleinfo("NOT FOUND MODULE")
             end
