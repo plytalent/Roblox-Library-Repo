@@ -2,6 +2,7 @@ local module
 local cache = {}
 local real_print = print
 local real_tostring = tostring
+local real_debug = debug
 local tostring
 local tostringnobuf
 local print
@@ -142,6 +143,7 @@ module = {
     	print(lines[tonumber(errorlinenum)+1])
     end,
     Load = function(modulename)
+	rconsoleinfo("Calling From"..real_debug.getinfo(2).name)
 	print("[Library Loader]Loading "..modulename)
         if not isfolder("module") then
             makefolder("module")
