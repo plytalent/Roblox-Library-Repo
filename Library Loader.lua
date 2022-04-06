@@ -165,4 +165,4 @@ module = {
     end
 }
 
-return module.Load
+return module
