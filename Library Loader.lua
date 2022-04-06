@@ -150,8 +150,8 @@ module = {
             makefolder("module")
         end
         local modules = listfiles("module")
-        if findvalue_in_table(modulename,modules) then
-            return module.LocalLoad("module/"..modulename..".lua")
+        if findvalue_in_table("module\\"modulename,modules) then
+            return module.LocalLoad("module\\"..modulename..".lua")
         else
             print("[Library Loader]Loading From https://raw.githubusercontent.com/plytalent/Roblox-Library-Repo/main/"..modulename:gsub("%s+","%%20")..".lua")
 	    local  url = "https://raw.githubusercontent.com/plytalent/Roblox-Library-Repo/main/"..modulename:gsub("%s+","%%20")..".lua"
