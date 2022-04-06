@@ -100,7 +100,7 @@ local err, return_result = pcall(function()
             lock = true
         }
 
-        local Parent = Parent
+        local Parent = Parent or DrawUI.Screen
         if not tostring(Parent):find("Custom_UI_Library_Object_From_Draw_Library(") then
             Parent = DrawUI.Screen
         end
