@@ -1,282 +1,183 @@
-assert(rconsoleinfo, 'exploit not supported')
-assert(Drawing, 'exploit not supported')
-local RequireLibraryCode = ""
-local success, ErrorStatement = pcall(function()
-    return game:HttpGet("https://github.com/plytalent/Roblox-Library-Repo/raw/main/Library%20Loader.lua")
-end)
-if not success or test_fallback then
-    rconsoleinfo(string.format("[Script][ERROR]\t %s",tostring(ErrorStatement)))
-else
-    RequireLibraryCode = ErrorStatement
+local libsetting = {
+    loglevel=1
+}
+local scheduler = {}
+local buffer = {}
+local real_func = {
+    print = print,
+    tostring = tostring
+}
+local tostring = nil
+local print = nil
+local debug = nil
+local namepool = {}
+
+local random = Random.new()
+local letters = {'a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z'}
+
+function getRandomLetter()
+	return letters[random:NextInteger(1,#letters)]
 end
-local RequireLibrary = loadstring(RequireLibraryCode)().Load
-local The_Slient_Library = RequireLibrary("The Slient Library")
-local err, return_result = pcall(function()
-    local player = game:GetService("Players").LocalPlayer
-    local mouse = player:GetMouse()
-    local UserInputService = game:GetService("UserInputService")
-    local ODrawingSynX = {}
-    local DrawUIold = {
-        mouse_down = false,
-        drawinglist = {},
-        mouse_down_funcs = {}
-    }
 
-    local DrawUI = {
-        Screen = {
-            ClassName="Screen",
-            Name = "Screen",
-            _internal_var_={lock = true},
-            _Children_ = {},
-            GetChildren = function(self)
-                return self._Children_
+function getRandomString(length, includeCapitals)
+	local length = length or 10
+	local str = ''
+	for i=1,length do
+		local randomLetter = getRandomLetter()
+		if includeCapitals and random:NextNumber() > .5 then
+			randomLetter = string.upper(randomLetter)
+		end
+		str = str .. randomLetter
+	end
+    if namepool[str] then
+        str = getRandomString()
+    end
+    namepool[str] = str
+	return str
+end
+
+function buffer.new()
+    local self = setmetatable({},buffer)
+    self.Buffer = {}
+    return self
+end
+
+function buffer:Read()
+    local newstr = ""
+    for i=1,#self.buffer do
+        newstr = newstr.. tostring(self.buffer[i])
+    end
+    return newstr
+end
+
+function buffer:Write(data)
+    self.buffer[#self.buffer+1] = data
+end
+
+function scheduler.new()
+    local self = setmetatable({},scheduler)
+    self.loop = game:GetService("RunService").Stepped
+    self._internal_event_ = {}
+    self._internal_var_ = {}
+    self._internal_func_ = {}
+    self.funcs = {}
+    self._internal_var_.Changing_event = false
+    self._internal_var_.Executed_Function = true
+    self._internal_var_.execution_index = 1
+    self._internal_var_.RandomString = getRandomString()
+    self._internal_func_.bindtoloop = function()
+        self._internal_event_.MainEventLoop = self.loop:Connect(function(delta)
+            local start_index = 1
+            if self._internal_var_.execution_index > 1 then
+                start_index = self._internal_var_.execution_index
             end
-        }
-    }
-
-    function GetMouseLocation()
-    	return UserInputService:GetMouseLocation();
-    end
-
-    function IsMouseOverDrawing(Drawing, MousePosition)
-    	local TopLeft = Drawing.Position;
-        local BottomRight
-        if Drawing.Text then
-            BottomRight = Vector2.new(Drawing.Position.X + #Drawing.Text, Drawing.Position.Y+(DrawUI:Count_Newline(Drawing.Text)*Drawing.Size))
-        else
-            BottomRight = Drawing.Position + Drawing.Size;
-        end
-        local MousePosition = MousePosition or GetMouseLocation();
-
-        return MousePosition.X > TopLeft.X and MousePosition.Y > TopLeft.Y and MousePosition.X < BottomRight.X and MousePosition.Y < BottomRight.Y;
-    end
-
-    function MakeDraggable(drawingobject)
-        DrawUI.mouse_down_funcs[drawingobject] = (function(drawingobject)
-            local drawingobject = drawingobject
-            local MouseLocation = GetMouseLocation()
-            local delta = drawingobject.Position - MouseLocation
-            while DrawUI.mouse_down do
-                game:GetService("RunService").RenderStepped:Wait()
-                drawingobject.Position = GetMouseLocation() + delta
+            local delta = tick()
+            for i=start_index , #self.funcs do
+                if self.funcs[i] then
+                    self._internal_var_.Executed_Function = false
+                    self.funcs[i]()
+                    self._internal_var_.Executed_Function = true
+                    debug("[Scheduler Event]", "[", self._internal_var_.RandomString, "]", "Function Took", (tick()-delta)*1000, "ms to Execute")
+                    delta = tick()
+                    self._internal_var_.execution_index = i
+                    if self._internal_var_.Changing_event then
+                        break
+                    end  
+                end
             end
         end)
+        debug("[Scheduler]", "[", self._internal_var_.RandomString, "]", "Binded To New Loop")
     end
-
-    setmetatable(DrawUI.Screen,{
-        _index = function(self,index)
-            if index ~= "_internal_var_" and rawget(rawget(self,"_internal_var_"),"lock") then
-                local valuefromindex = rawget(self,index)
-                if valuefromindex then
-                    return valuefromindex
-                end
-            end
-        end,
-        _newindex  == function(self,index,value)
-        end,
-        _tostring = function()
-            return "Custom_UI_Library_Object_From_Draw_Library(Screen)" 
-        end,
-        _unm = function()end,
-        _add = function() end,
-        _sub = function() end,
-        _mul = function() end,
-        _div = function() end,
-        _mod = function() end,
-        _pow = function() end,
-        _eq = function() end,
-        _lt = function() end,
-        _le = function() end
-    })
-    function DrawUI.new(UIClass, Parent)
-        local self = {}
-
-        self._internal_var_ = {
-            lock = true
-        }
-
-        local Parent = Parent
-        if not Parent["ClassName"] and not tostring(Parent):find("Custom_UI_Library_Object_From_Draw_Library(") then
-            Parent = DrawUI.Screen
-        end
-        self.Parent = Parent
-        self.Name = self.ClassName
-        self.ClassName = self.ClassName
-
-        self._Children_ = {}
-        self.GetChildren = function()
-            local newtable = {}
-            for _, child in pairs(self._Children_) do
-                newtable[#newtable+1] = child
-            end
-            return newtable
-        end
-
-        if self.ClassName ~= "Folder" then
-            self.Color = Color3.new(1,1,1)
-            self.ZIndex = 0
-            self.Visible = true
-            self.Transparency = 1
-
-            if self.ClassName ~= "Line" then
-                self._internal_event_.MouseEvent = {
-                    MouseButton1Down = Instance.new("BindableEvent"),
-                    MouseButton1Up = Instance.new("BindableEvent"),
-                    MouseButton2Down = Instance.new("BindableEvent"),
-                    MouseButton2Up = Instance.new("BindableEvent"),
-                    InputBegan = Instance.new("BindableEvent"),
-                    InputChanged = Instance.new("BindableEvent"),
-                    InputEnded = Instance.new("BindableEvent"),
-                    MouseMoved = Instance.new("BindableEvent"),
-                    MouseEnter = Instance.new("BindableEvent"),
-                    MouseLeave = Instance.new("BindableEvent"),
-                    MouseWheelBackward = Instance.new("BindableEvent"),
-                    MouseWheelForward = Instance.new("BindableEvent")
-                }
-
-                self.MouseButton1Down = self._internal_event_.MouseEvent.MouseButton1Down.Event
-                self.MouseButton1Up = self._internal_event_.MouseEvent.MouseButton1Up.Event
-                self.MouseButton2Down = self._internal_event_.MouseEvent.MouseButton2Down.Event
-                self.MouseButton2Up = self._internal_event_.MouseEvent.MouseButton2Up.Event
-                self.InputBegan = self._internal_event_.MouseEvent.InputBegan.Event
-                self.InputChanged = self._internal_event_.MouseEvent.InputChanged.Event
-                self.InputEnded = self._internal_event_.MouseEvent.InputEnded.Event
-                self.MouseMoved = self._internal_event_.MouseEvent.MouseMoved.Event
-                self.MouseEnter = self._internal_event_.MouseEvent.MouseEnter.Event
-                self.MouseLeave = self._internal_event_.MouseEvent.MouseLeave.Event
-                self.MouseWheelBackward = self._internal_event_.MouseEvent.MouseWheelBackward.Event
-                self.MouseWheelForward = self._internal_event_.MouseEvent.MouseWheelForward.Event
-
-                self.MouseButton1Click = self.MouseButton1Down
-                self.MouseButton2Click = self.MouseButton2Down
-
-                for index, value in pairs(self._internal_event_.MouseEvent) do
-                    local invarindex = index:gsub("Mouse","")
-                    if invarindex == "Moved" then
-                        invarindex = "Move"
-                    end
-                    local has, ev = pcall(function()
-                        return mouse[invarindex]
-                    end)
-                    if has then
-                        self._internal_var_[invarindex] = ev:Connect(function(...)
-                            local UIObject = rawget(self,"_internal_var_")["DrawingObject"]
-                            if self.ClassName == "TextButton" or self.ClassName == "TextLabel" then
-                                UIObject = rawget(self,"_internal_var_")["DrawingObject"]
-                            else
-                                if IsMouseOverDrawing(rawget(self,"_internal_var_")["DrawingObject"]) and rawget(self,"_internal_var_")["DrawingObject"].Visible then
-                                    self._internal_event_.MouseEvent[index]:Fire(mouse.x, mouse.y)
-                                end
-                            end
-                            if IsMouseOverDrawing(rawget(self,"_internal_var_")["DrawingObject2"]) and .Visible then
-                                self._internal_event_.MouseEvent[index]:Fire(mouse.x, mouse.y)
-                            end
-                        end)
-                    else
-                        local has, ev = pcall(function()
-                            return UserInputService[invarindex]
-                        end)
-                        if has then
-                            self._internal_var_[invarindex] = ev:Connect(function(...)
-                                local UIObject = rawget(self,"_internal_var_")["DrawingObject"]
-                                if self.ClassName == "TextButton" or self.ClassName == "TextLabel" then
-                                    UIObject = rawget(self,"_internal_var_")["DrawingObject"]
-                                else
-                                    if IsMouseOverDrawing(rawget(self,"_internal_var_")["DrawingObject"]) and rawget(self,"_internal_var_")["DrawingObject"].Visible then
-                                        self._internal_event_.MouseEvent[index]:Fire(...)
-                                    end
-                                end
-                                if IsMouseOverDrawing(rawget(self,"_internal_var_")["DrawingObject2"]) and .Visible then
-                                    self._internal_event_.MouseEvent[index]:Fire(...)
-                                end
-                            end)
-                        end
-                    end
-                end
-            end
-
-            if self.ClassName == "TextButton" or self.ClassName == "TextLabel" then
-                self._internal_var_.DrawingObject = Drawing.new("Text")
-                self._internal_var_.DrawingObject2 = Drawing.new("Square")
-            else
-                self._internal_var_.DrawingObject = Drawing.new(self.ClassName)
-            end
-
-            self.UnLock = function()
-                rawset(rawget(rawget(self,"_internal_var_"),"lock"), not rawget(rawget(self,"_internal_var_"),"lock"))
-            end
-
-            self.Remove = function()
-                if self._internal_var_.DrawingObject then
-                    self._internal_var_.DrawingObject:Remove()
-                end
-                if self._internal_var_.DrawingObject2 then
-                    self._internal_var_.DrawingObject2:Remove()
-                end
-            end
-
-            self = setmetatable(self,{
-                _index = function(self,index)
-                    if index ~= "_internal_var_" and rawget(rawget(self,"_internal_var_"),"lock") then
-                        local valuefromindex = rawget(self,index) or rawget(self,"_internal_var_")["DrawingObject"][index]
-                        if self.ClassName == "TextButton" or self.ClassName == "TextLabel" then
-                            if index == "Text" then
-                                valuefromindex = rawget(rawget(self,"_internal_var_"),"DrawingObject")[index]
-                            elseif index == "ZIndex" then
-                                valuefromindex = rawget(rawget(self,"_internal_var_"),"DrawingObject")[index]
-                            elseif index == "BackgroundColor" then
-                                valuefromindex = rawget(rawget(self,"_internal_var_"),"DrawingObject2")["Color"]
-                            elseif index == "BackgroundTransparency" then
-                                valuefromindex = rawget(rawget(self,"_internal_var_"),"DrawingObject2")["Transparency"]
-                            end
-                        end
-                        if valuefromindex then
-                            return valuefromindex
-                        end
-                    end
-                end,
-                _newindex  == function(self,index,value)
-                    if index ~= "ClassName" and index ~= "TextBounds" and (index == "_internal_var_" and rawget(rawget(self,"_internal_var_"),"lock")) then
-                        if self.ClassName == "TextButton" or self.ClassName == "TextLabel" then
-                            if index == "Text" then
-                                rawget(rawget(self,"_internal_var_"),"DrawingObject")[index] = value
-                            elseif index == "ZIndex" then
-                                rawget(rawget(self,"_internal_var_"),"DrawingObject")[index] = value
-                                rawget(rawget(self,"_internal_var_"),"DrawingObject2")[index] = rawget(rawget(self,"_internal_var_"),"DrawingObject")[index] - 1 
-                            elseif index == "BackgroundColor" then
-                                rawget(rawget(self,"_internal_var_"),"DrawingObject2")["Color"] = value
-                            elseif index == "BackgroundTransparency" then
-                                rawget(rawget(self,"_internal_var_"),"DrawingObject2")["Transparency"] = value
-                            end
-                        else
-                            if index == "Parent" then
-                                rawset(self.Parent,self.Name,self)
-                            end
-                            rawset(self,index,value)
-                        end
-                    end
-                end,
-                _tostring = function()
-                    return "Custom_UI_Library_Object_From_Draw_Library("..self.Name..")" 
-                end,
-                _unm = function()end,
-                _add = function() end,
-                _sub = function() end,
-                _mul = function() end,
-                _div = function() end,
-                _mod = function() end,
-                _pow = function() end,
-                _eq = function() end,
-                _lt = function() end,
-                _le = function() end
-            })
-        end
-        return self
-    end
-    return DrawUI
-end)
-if err then
-    return return_result
-else
-    The_Slient_Library.Custom_Functions.print(return_result)
+    self._internal_func_.bindtoloop()
+    debug("[Scheduler]", "[", self._internal_var_.RandomString, "]", "Initialized")
+    return self
 end
+function scheduler:Add_Func(self,func,args)
+    debug("[Scheduler]", "[", self._internal_var_.RandomString, "]", "Add Function To scheduler")
+    self.funcs[#self.funcs+1] = func
+end
+function scheduler:Remove_Func(self,func)
+    for index=1, #self.funcs do
+        if self.funcs[index] == func then
+            debug("[Scheduler]", "[", self._internal_var_.RandomString, "]", "Remove Function From scheduler")
+            self.funcs[index] = nil
+        end
+    end
+end
+function scheduler:Switch_Event(ev)
+    if not ev then
+        debug("[Scheduler]", "[", self._internal_var_.RandomString, "]", "Switching Event Scheduler")
+        self._internal_event_.MainEventLoop:Disconnect()
+        self._internal_var_.Changing_event = true
+        while self._internal_var_.Executed_Function do
+            self.loop:Wait()
+        end
+        self._internal_var_.Changing_event = false
+        self.loop = ev
+        self._internal_func_.bindtoloop()
+    end
+end
+
+tostring = function(input)
+    local typeofinput = typeof(input):lower()
+    if typeofinput == "instance" or typeofinput == "userdata" then
+        local can_get_name, name = pcall(function()
+            return input.Name
+        end)
+        if can_get_name then
+            return tostring(name)
+        end
+    elseif typeofinput == "table" then
+        local newbuffer = buffer.new()
+        newbuffer:Write("{")
+        newbuffer:Write("\n")
+        for index,value in pairs(input) do
+            newbuffer:Write(index)
+            newbuffer:Write(" = ")
+            newbuffer:Write(tostring(value))
+            newbuffer:Write(",")
+            newbuffer:Write("\n")
+        end
+        newbuffer:Write("}")
+        return newbuffer:Read()
+    end
+    return real_func["tostring"](input)
+end
+print = function(...)
+    if libsetting.loglevel > 0 then
+        local args = {...}
+        local buffer = buffer.new()
+        for i=1, #args do
+            buffer:Write(args[i])
+            buffer:Write("\t")
+        end
+        rconsoleinfo(buffer:Read())
+    end
+end
+debug = function(...)
+    if libsetting.loglevel > 4 then
+        local args = {"[Debug]",...}
+        print(args)
+    end
+end
+function Count_Newline(str)
+    local lines = 1
+    for i = 1, #str do
+        local c = str:sub(i, i)
+        if c == '\n' then
+            lines = lines + 1
+        end
+    end
+    return lines
+end
+return {
+    scheduler   =   scheduler,
+    buffer      =   buffer,
+    Custom_Functions = {
+        tostring = tostring,
+        print = print,
+        debug = debug,
+        count_Newline = Count_Newline
+    },
+    settings = libsetting
+}
