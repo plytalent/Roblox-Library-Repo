@@ -1,5 +1,6 @@
 assert(rconsoleinfo, 'exploit not supported')
 assert(Drawing, 'exploit not supported')
+
 local s,e = pcall(function()
     error("")
 end)
