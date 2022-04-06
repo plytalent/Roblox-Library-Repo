@@ -1,9 +1,12 @@
+local s,e = pcall(function()
+    error("")
+end)
+
+rconsoleinfo("The Slient Library "..string.sub(e,1,string.len(e)-4))
+
 local libsetting = {
     loglevel=1
 }
-local s,e = pcall(function()
-    error("Get script name")
-end)
 
 local scheduler = {}
 local buffer = {}
@@ -16,8 +19,6 @@ local tostring = nil
 local print = nil
 local debug = nil
 local namepool = {}
-
-print("The Slient Library Name " ..e)
 
 local random = Random.new()
 local letters = {'a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z'}
@@ -58,8 +59,6 @@ function buffer.new()
     end
     return self
 end
-
-
 
 function scheduler.new()
     local self = setmetatable({},scheduler)
