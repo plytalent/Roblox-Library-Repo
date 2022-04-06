@@ -16,9 +16,6 @@ else
     RequireLibraryCode = ErrorStatement
 end
 local RequireLibraryRaw = loadstring(RequireLibraryCode)()
-for i, v in pairs(RequireLibraryRaw) do
-    print(RequireLibraryRaw, i, v)
-end
 local RequireLibrary = RequireLibraryRaw.Load
 local The_Slient_Library = RequireLibrary("The Slient Library")
 local module = {}
@@ -54,39 +51,40 @@ function worldpoint_to_viewpoint_list()
         local Bounding = {}
         local viewpoint = {}
         local FacingDirection = Vector3.new()
-
-        if not char:IsA("Model") or #char:GetChildren() == 0 then
-            char = findplayercharacterinworkspace(player)
-        end
-
         if char then
-            FacingDirection           = (char.Head.CFrame * CFrame.new(0,0,char.Head.Size.Z/2)).p
-            charpartposition.Head     = char.Head.Position
-            viewpoint.Head            = {currentcamera:WorldToViewportPoint(charpartposition.Head)}
-            viewpoint.FacingDirection = {currentcamera:WorldToViewportPoint(FacingDirection)}
-            worldpoint_to_viewpoint[player.Name] = viewpoint
-            --[[
-            charpartposition.Torso    = char.Torso.Position
-            charpartposition.LeftArm  = char["Left Arm"].Position
-            charpartposition.LeftLeg  = char["Left Leg"].Position
-            charpartposition.RightArm = char["Right Arm"].Position
-            charpartposition.RightLeg = char["Right Leg"].Position
+            if not char:IsA("Model") or #char:GetChildren() == 0 then
+                char = findplayercharacterinworkspace(player)
+            end
+    
+            if char then
+                FacingDirection           = (char.Head.CFrame * CFrame.new(0,0,char.Head.Size.Z/2)).p
+                charpartposition.Head     = char.Head.Position
+                viewpoint.Head            = {currentcamera:WorldToViewportPoint(charpartposition.Head)}
+                viewpoint.FacingDirection = {currentcamera:WorldToViewportPoint(FacingDirection)}
+                worldpoint_to_viewpoint[player.Name] = viewpoint
+                --[[
+                charpartposition.Torso    = char.Torso.Position
+                charpartposition.LeftArm  = char["Left Arm"].Position
+                charpartposition.LeftLeg  = char["Left Leg"].Position
+                charpartposition.RightArm = char["Right Arm"].Position
+                charpartposition.RightLeg = char["Right Leg"].Position
+    
+                charpartsize.Torso        = char.Torso.Size
+                charpartsize.Head         = char.Head.Size
+                charpartsize.LeftArm      = char["Left Arm"].Size
+                charpartsize.LeftLeg      = char["Left Leg"].Size
+                charpartsize.RightArm     = char["Right Arm"].Size
+                charpartsize.RightLeg     = char["Right Leg"].Size
 
-            charpartsize.Torso        = char.Torso.Size
-            charpartsize.Head         = char.Head.Size
-            charpartsize.LeftArm      = char["Left Arm"].Size
-            charpartsize.LeftLeg      = char["Left Leg"].Size
-            charpartsize.RightArm     = char["Right Arm"].Size
-            charpartsize.RightLeg     = char["Right Leg"].Size
-
-            viewpoint.Torso           = currentcamera:WorldToViewportPoint(charpartposition.Torso)
-            viewpoint.LeftArm         = currentcamera:WorldToViewportPoint(charpartposition.LeftArm)
-            viewpoint.LeftLeg         = currentcamera:WorldToViewportPoint(charpartposition.LeftLeg)
-            viewpoint.RightArm        = currentcamera:WorldToViewportPoint(charpartposition.RightArm)
-            viewpoint.RightLeg        = currentcamera:WorldToViewportPoint(charpartposition.RightLeg)
-            --]]
-        else
-            worldpoint_to_viewpoint[player.Name] = nil
+                viewpoint.Torso           = currentcamera:WorldToViewportPoint(charpartposition.Torso)
+                viewpoint.LeftArm         = currentcamera:WorldToViewportPoint(charpartposition.LeftArm)
+                viewpoint.LeftLeg         = currentcamera:WorldToViewportPoint(charpartposition.LeftLeg)
+                viewpoint.RightArm        = currentcamera:WorldToViewportPoint(charpartposition.RightArm)
+                viewpoint.RightLeg        = currentcamera:WorldToViewportPoint(charpartposition.RightLeg)
+                --]]
+            else
+                worldpoint_to_viewpoint[player.Name] = nil
+            end
         end
     end
 end
