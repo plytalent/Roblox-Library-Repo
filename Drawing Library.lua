@@ -16,7 +16,6 @@ else
 end
 local RequireLibrary = loadstring(RequireLibraryCode)().Load
 local The_Slient_Library = RequireLibrary("The Slient Library")
-rconsoleinfo("Calling From"..debug.getinfo(2).name)
 local err, return_result = pcall(function()
     local player = game:GetService("Players").LocalPlayer
     local mouse = player:GetMouse()
