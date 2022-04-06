@@ -68,6 +68,8 @@ module = {
 		end
 		if libraryloaded ~= nil then
                     return libraryloaded
+		else
+		    print("NO LIBRARY LOADED")
 		end
             else
                 rconsoleinfo("NOT FOUND MODULE")
