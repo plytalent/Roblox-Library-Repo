@@ -19,10 +19,10 @@ local DrawUI = {
     Screen = {
         ClassName="Screen",
         Name = "Screen",
-        __internal_var__={lock = true},
-        __Children__ = {},
+        _internal_var_={lock = true},
+        _Children_ = {},
         GetChildren = function(self)
-            return self.__Children__
+            return self._Children_
         end
     }
 }
@@ -57,34 +57,34 @@ function MakeDraggable(drawingobject)
 end
 
 setmetatable(DrawUI.Screen,{
-    __index = function(self,index)
-        if index ~= "__internal_var__" and rawget(rawget(self,"__internal_var__"),"lock") then
+    _index = function(self,index)
+        if index ~= "_internal_var_" and rawget(rawget(self,"_internal_var_"),"lock") then
             local valuefromindex = rawget(self,index)
             if valuefromindex then
                 return valuefromindex
             end
         end
     end,
-    __newindex  == function(self,index,value)
+    _newindex  == function(self,index,value)
     end,
-    __tostring = function()
+    _tostring = function()
         return "Custom_UI_Library_Object_From_Draw_Library(Screen)" 
     end,
-    __unm = function()end,
-    __add = function() end,
-    __sub = function() end,
-    __mul = function() end,
-    __div = function() end,
-    __mod = function() end,
-    __pow = function() end,
-    __eq = function() end,
-    __lt = function() end,
-    __le = function() end
+    _unm = function()end,
+    _add = function() end,
+    _sub = function() end,
+    _mul = function() end,
+    _div = function() end,
+    _mod = function() end,
+    _pow = function() end,
+    _eq = function() end,
+    _lt = function() end,
+    _le = function() end
 })
 function DrawUI.new(UIClass, Parent)
     local self = {}
 
-    self.__internal_var__ = {
+    self._internal_var_ = {
         lock = true
     }
 
@@ -96,10 +96,10 @@ function DrawUI.new(UIClass, Parent)
     self.Name = self.ClassName
     self.ClassName = self.ClassName
 
-    self.__Children__ = {}
+    self._Children_ = {}
     self.GetChildren = function()
         local newtable = {}
-        for _, child in pairs(self.__Children__) do
+        for _, child in pairs(self._Children_) do
             newtable[#newtable+1] = child
         end
         return newtable
@@ -112,7 +112,7 @@ function DrawUI.new(UIClass, Parent)
         self.Transparency = 1
 
         if self.ClassName ~= "Line" then
-            self.__internal_event__.MouseEvent = {
+            self._internal_event_.MouseEvent = {
                 MouseButton1Down = Instance.new("BindableEvent"),
                 MouseButton1Up = Instance.new("BindableEvent"),
                 MouseButton2Down = Instance.new("BindableEvent"),
@@ -127,23 +127,23 @@ function DrawUI.new(UIClass, Parent)
                 MouseWheelForward = Instance.new("BindableEvent")
             }
 
-            self.MouseButton1Down = self.__internal_event__.MouseEvent.MouseButton1Down.Event
-            self.MouseButton1Up = self.__internal_event__.MouseEvent.MouseButton1Up.Event
-            self.MouseButton2Down = self.__internal_event__.MouseEvent.MouseButton2Down.Event
-            self.MouseButton2Up = self.__internal_event__.MouseEvent.MouseButton2Up.Event
-            self.InputBegan = self.__internal_event__.MouseEvent.InputBegan.Event
-            self.InputChanged = self.__internal_event__.MouseEvent.InputChanged.Event
-            self.InputEnded = self.__internal_event__.MouseEvent.InputEnded.Event
-            self.MouseMoved = self.__internal_event__.MouseEvent.MouseMoved.Event
-            self.MouseEnter = self.__internal_event__.MouseEvent.MouseEnter.Event
-            self.MouseLeave = self.__internal_event__.MouseEvent.MouseLeave.Event
-            self.MouseWheelBackward = self.__internal_event__.MouseEvent.MouseWheelBackward.Event
-            self.MouseWheelForward = self.__internal_event__.MouseEvent.MouseWheelForward.Event
+            self.MouseButton1Down = self._internal_event_.MouseEvent.MouseButton1Down.Event
+            self.MouseButton1Up = self._internal_event_.MouseEvent.MouseButton1Up.Event
+            self.MouseButton2Down = self._internal_event_.MouseEvent.MouseButton2Down.Event
+            self.MouseButton2Up = self._internal_event_.MouseEvent.MouseButton2Up.Event
+            self.InputBegan = self._internal_event_.MouseEvent.InputBegan.Event
+            self.InputChanged = self._internal_event_.MouseEvent.InputChanged.Event
+            self.InputEnded = self._internal_event_.MouseEvent.InputEnded.Event
+            self.MouseMoved = self._internal_event_.MouseEvent.MouseMoved.Event
+            self.MouseEnter = self._internal_event_.MouseEvent.MouseEnter.Event
+            self.MouseLeave = self._internal_event_.MouseEvent.MouseLeave.Event
+            self.MouseWheelBackward = self._internal_event_.MouseEvent.MouseWheelBackward.Event
+            self.MouseWheelForward = self._internal_event_.MouseEvent.MouseWheelForward.Event
 
             self.MouseButton1Click = self.MouseButton1Down
             self.MouseButton2Click = self.MouseButton2Down
 
-            for index, value in pairs(self.__internal_event__.MouseEvent) do
+            for index, value in pairs(self._internal_event_.MouseEvent) do
                 local invarindex = index:gsub("Mouse","")
                 if invarindex == "Moved" then
                     invarindex = "Move"
@@ -152,17 +152,17 @@ function DrawUI.new(UIClass, Parent)
                     return mouse[invarindex]
                 end)
                 if has then
-                    self.__internal_var__[invarindex] = ev:Connect(function(...)
-                        local UIObject = rawget(self,"__internal_var__")["DrawingObject"]
+                    self._internal_var_[invarindex] = ev:Connect(function(...)
+                        local UIObject = rawget(self,"_internal_var_")["DrawingObject"]
                         if self.ClassName == "TextButton" or self.ClassName == "TextLabel" then
-                            UIObject = rawget(self,"__internal_var__")["DrawingObject"]
+                            UIObject = rawget(self,"_internal_var_")["DrawingObject"]
                         else
-                            if IsMouseOverDrawing(rawget(self,"__internal_var__")["DrawingObject"]) and rawget(self,"__internal_var__")["DrawingObject"].Visible then
-                                self.__internal_event__.MouseEvent[index]:Fire(mouse.x, mouse.y)
+                            if IsMouseOverDrawing(rawget(self,"_internal_var_")["DrawingObject"]) and rawget(self,"_internal_var_")["DrawingObject"].Visible then
+                                self._internal_event_.MouseEvent[index]:Fire(mouse.x, mouse.y)
                             end
                         end
-                        if IsMouseOverDrawing(rawget(self,"__internal_var__")["DrawingObject2"]) and .Visible then
-                            self.__internal_event__.MouseEvent[index]:Fire(mouse.x, mouse.y)
+                        if IsMouseOverDrawing(rawget(self,"_internal_var_")["DrawingObject2"]) and .Visible then
+                            self._internal_event_.MouseEvent[index]:Fire(mouse.x, mouse.y)
                         end
                     end)
                 else
@@ -170,17 +170,17 @@ function DrawUI.new(UIClass, Parent)
                         return UserInputService[invarindex]
                     end)
                     if has then
-                        self.__internal_var__[invarindex] = ev:Connect(function(...)
-                            local UIObject = rawget(self,"__internal_var__")["DrawingObject"]
+                        self._internal_var_[invarindex] = ev:Connect(function(...)
+                            local UIObject = rawget(self,"_internal_var_")["DrawingObject"]
                             if self.ClassName == "TextButton" or self.ClassName == "TextLabel" then
-                                UIObject = rawget(self,"__internal_var__")["DrawingObject"]
+                                UIObject = rawget(self,"_internal_var_")["DrawingObject"]
                             else
-                                if IsMouseOverDrawing(rawget(self,"__internal_var__")["DrawingObject"]) and rawget(self,"__internal_var__")["DrawingObject"].Visible then
-                                    self.__internal_event__.MouseEvent[index]:Fire(...)
+                                if IsMouseOverDrawing(rawget(self,"_internal_var_")["DrawingObject"]) and rawget(self,"_internal_var_")["DrawingObject"].Visible then
+                                    self._internal_event_.MouseEvent[index]:Fire(...)
                                 end
                             end
-                            if IsMouseOverDrawing(rawget(self,"__internal_var__")["DrawingObject2"]) and .Visible then
-                                self.__internal_event__.MouseEvent[index]:Fire(...)
+                            if IsMouseOverDrawing(rawget(self,"_internal_var_")["DrawingObject2"]) and .Visible then
+                                self._internal_event_.MouseEvent[index]:Fire(...)
                             end
                         end)
                     end
@@ -189,38 +189,38 @@ function DrawUI.new(UIClass, Parent)
         end
 
         if self.ClassName == "TextButton" or self.ClassName == "TextLabel" then
-            self.__internal_var__.DrawingObject = Drawing.new("Text")
-            self.__internal_var__.DrawingObject2 = Drawing.new("Square")
+            self._internal_var_.DrawingObject = Drawing.new("Text")
+            self._internal_var_.DrawingObject2 = Drawing.new("Square")
         else
-            self.__internal_var__.DrawingObject = Drawing.new(self.ClassName)
+            self._internal_var_.DrawingObject = Drawing.new(self.ClassName)
         end
 
         self.UnLock = function()
-            rawset(rawget(rawget(self,"__internal_var__"),"lock"), not rawget(rawget(self,"__internal_var__"),"lock"))
+            rawset(rawget(rawget(self,"_internal_var_"),"lock"), not rawget(rawget(self,"_internal_var_"),"lock"))
         end
 
         self.Remove = function()
-            if self.__internal_var__.DrawingObject then
-                self.__internal_var__.DrawingObject:Remove()
+            if self._internal_var_.DrawingObject then
+                self._internal_var_.DrawingObject:Remove()
             end
-            if self.__internal_var__.DrawingObject2 then
-                self.__internal_var__.DrawingObject2:Remove()
+            if self._internal_var_.DrawingObject2 then
+                self._internal_var_.DrawingObject2:Remove()
             end
         end
 
         self = setmetatable(self,{
-            __index = function(self,index)
-                if index ~= "__internal_var__" and rawget(rawget(self,"__internal_var__"),"lock") then
-                    local valuefromindex = rawget(self,index) or rawget(self,"__internal_var__")["DrawingObject"][index]
+            _index = function(self,index)
+                if index ~= "_internal_var_" and rawget(rawget(self,"_internal_var_"),"lock") then
+                    local valuefromindex = rawget(self,index) or rawget(self,"_internal_var_")["DrawingObject"][index]
                     if self.ClassName == "TextButton" or self.ClassName == "TextLabel" then
                         if index == "Text" then
-                            valuefromindex = rawget(rawget(self,"__internal_var__"),"DrawingObject")[index]
+                            valuefromindex = rawget(rawget(self,"_internal_var_"),"DrawingObject")[index]
                         elseif index == "ZIndex" then
-                            valuefromindex = rawget(rawget(self,"__internal_var__"),"DrawingObject")[index]
+                            valuefromindex = rawget(rawget(self,"_internal_var_"),"DrawingObject")[index]
                         elseif index == "BackgroundColor" then
-                            valuefromindex = rawget(rawget(self,"__internal_var__"),"DrawingObject2")["Color"]
+                            valuefromindex = rawget(rawget(self,"_internal_var_"),"DrawingObject2")["Color"]
                         elseif index == "BackgroundTransparency" then
-                            valuefromindex = rawget(rawget(self,"__internal_var__"),"DrawingObject2")["Transparency"]
+                            valuefromindex = rawget(rawget(self,"_internal_var_"),"DrawingObject2")["Transparency"]
                         end
                     end
                     if valuefromindex then
@@ -228,18 +228,18 @@ function DrawUI.new(UIClass, Parent)
                     end
                 end
             end,
-            __newindex  == function(self,index,value)
-                if index ~= "ClassName" and index ~= "TextBounds" and (index == "__internal_var__" and rawget(rawget(self,"__internal_var__"),"lock")) then
+            _newindex  == function(self,index,value)
+                if index ~= "ClassName" and index ~= "TextBounds" and (index == "_internal_var_" and rawget(rawget(self,"_internal_var_"),"lock")) then
                     if self.ClassName == "TextButton" or self.ClassName == "TextLabel" then
                         if index == "Text" then
-                            rawget(rawget(self,"__internal_var__"),"DrawingObject")[index] = value
+                            rawget(rawget(self,"_internal_var_"),"DrawingObject")[index] = value
                         elseif index == "ZIndex" then
-                            rawget(rawget(self,"__internal_var__"),"DrawingObject")[index] = value
-                            rawget(rawget(self,"__internal_var__"),"DrawingObject2")[index] = rawget(rawget(self,"__internal_var__"),"DrawingObject")[index] - 1 
+                            rawget(rawget(self,"_internal_var_"),"DrawingObject")[index] = value
+                            rawget(rawget(self,"_internal_var_"),"DrawingObject2")[index] = rawget(rawget(self,"_internal_var_"),"DrawingObject")[index] - 1 
                         elseif index == "BackgroundColor" then
-                            rawget(rawget(self,"__internal_var__"),"DrawingObject2")["Color"] = value
+                            rawget(rawget(self,"_internal_var_"),"DrawingObject2")["Color"] = value
                         elseif index == "BackgroundTransparency" then
-                            rawget(rawget(self,"__internal_var__"),"DrawingObject2")["Transparency"] = value
+                            rawget(rawget(self,"_internal_var_"),"DrawingObject2")["Transparency"] = value
                         end
                     else
                         if index == "Parent" then
@@ -249,19 +249,19 @@ function DrawUI.new(UIClass, Parent)
                     end
                 end
             end,
-            __tostring = function()
+            _tostring = function()
                 return "Custom_UI_Library_Object_From_Draw_Library("..self.Name..")" 
             end,
-            __unm = function()end,
-            __add = function() end,
-            __sub = function() end,
-            __mul = function() end,
-            __div = function() end,
-            __mod = function() end,
-            __pow = function() end,
-            __eq = function() end,
-            __lt = function() end,
-            __le = function() end
+            _unm = function()end,
+            _add = function() end,
+            _sub = function() end,
+            _mul = function() end,
+            _div = function() end,
+            _mod = function() end,
+            _pow = function() end,
+            _eq = function() end,
+            _lt = function() end,
+            _le = function() end
         })
     end
     return self
