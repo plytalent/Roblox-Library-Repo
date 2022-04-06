@@ -2,7 +2,7 @@ local libsetting = {
     loglevel=1
 }
 local s,e = pcall(function()
-    error("")
+    error("Get script name")
 end)
 
 local scheduler = {}
