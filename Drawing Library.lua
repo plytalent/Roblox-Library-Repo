@@ -106,7 +106,7 @@ local err, return_result = pcall(function()
         end
         self.Parent = Parent
         self.Name = self.ClassName
-        self.ClassName = self.ClassName
+        self.ClassName = UIClass
 
         self._Children_ = {}
         self.GetChildren = function()
