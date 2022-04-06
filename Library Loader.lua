@@ -48,7 +48,7 @@ module = {
         end
     end,
     Load = function(modulename)
-		print("Loading"..modulename)
+	print("[Library Loader]Loading "..modulename)
         if not isfolder("module") then
             makefolder("module")
         end
@@ -56,10 +56,11 @@ module = {
         if findvalue_in_table(modulename,modules) then
             return module.LocalLoad("module/"..modulename..".lua")
         else
-            
-            local ScriptFromRepo = gethttp("https://raw.githubusercontent.com/plytalent/Roblox-Library-Repo/main/"..modulename:gsub("%s+","%%20")..".lua")
+            print("[Library Loader]Loading From https://raw.githubusercontent.com/plytalent/Roblox-Library-Repo/main/"..modulename:gsub("%s+","%%20")..".lua")
+	    local  url = "https://raw.githubusercontent.com/plytalent/Roblox-Library-Repo/main/"..modulename:gsub("%s+","%%20")..".lua"
+            local ScriptFromRepo = gethttp(url)
             if ScriptFromRepo ~= "404: Not Found" then
-                return module.ExternalLoad(ScriptFromRepo)
+                return module.ExternalLoad(url)
             else
                 rconsoleinfo("NOT FOUND MODULE")
             end
