@@ -50,15 +50,13 @@ tostring = function(input)
     return real_func["tostring"](input)
 end
 print = function(...)
-    if libsetting.loglevel > 0 then
-        local args = {...}
-        local buffer = buffer.new()
-        for i=1, #args do
-            buffer:Write(args[i])
-            buffer:Write("\t")
-        end
-        rconsoleinfo(buffer:Read())
+    local args = {...}
+    local buffer = buffer.new()
+    for i=1, #args do
+        buffer:Write(args[i])
+        buffer:Write("\t")
     end
+    rconsoleinfo(buffer:Read())
 end
 
 function findvalue_in_table(value,tb)
