@@ -5,7 +5,8 @@ local scheduler = {}
 local buffer = {}
 local real_func = {
     print = print,
-    tostring = tostring
+    tostring = tostring,
+    debug = debug
 }
 local tostring = nil
 local print = nil
@@ -90,11 +91,11 @@ function scheduler.new()
     end
     self._internal_func_.bindtoloop()
     debug("[Scheduler]", "[", self._internal_var_.RandomString, "]", "Initialized")
-    function self:Add_Func(self,func,args)
+    function self:Add_Func(func,args)
         debug("[Scheduler]", "[", self._internal_var_.RandomString, "]", "Add Function To scheduler")
         self.funcs[#self.funcs+1] = func
     end
-    function self:Remove_Func(self,func)
+    function self:Remove_Func(func)
         for index=1, #self.funcs do
             if self.funcs[index] == func then
                 debug("[Scheduler]", "[", self._internal_var_.RandomString, "]", "Remove Function From scheduler")
