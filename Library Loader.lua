@@ -174,4 +174,4 @@ module = {
     end
 }
 
-module.Load("Drawing Library")
+return module
