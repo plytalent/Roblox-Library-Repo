@@ -223,6 +223,7 @@ local err, return_result = pcall(function()
 
             self = setmetatable(self,{
                 _index = function(self,index)
+                    print(The_Slient_Library.Custom_Functions.tostring(self),index)
                     if index ~= "_internal_var_" and rawget(rawget(self,"_internal_var_"),"lock") then
                         local valuefromindex = rawget(self,index) or rawget(self,"_internal_var_")["DrawingObject"][index]
                         if self.ClassName == "TextButton" or self.ClassName == "TextLabel" then
@@ -242,6 +243,7 @@ local err, return_result = pcall(function()
                     end
                 end,
                 _newindex  == function(self,index,value)
+                    print(The_Slient_Library.Custom_Functions.tostring(self),index,value)
                     if index ~= "ClassName" and index ~= "TextBounds" and not (index == "_internal_var_" and rawget(rawget(self,"_internal_var_"),"lock")) then
                         if self.ClassName == "TextButton" or self.ClassName == "TextLabel" then
                             if index == "Text" then
