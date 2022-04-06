@@ -91,7 +91,7 @@ function worldpoint_to_viewpoint_list()
     end
 end
 
-scheduler_wpoint_to_vpoint:AddFunc(worldpoint_to_viewpoint_list)
+scheduler_wpoint_to_vpoint:Add_Func(worldpoint_to_viewpoint_list)
 
 function module.GetPlayerViewpointList(player)
     if worldpoint_to_viewpoint[player.Name] then
