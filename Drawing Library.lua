@@ -259,6 +259,10 @@ local err, return_result = pcall(function()
                                 rawset(self.Parent,self.Name,self)
                             end
                             rawset(self,index,value)
+                            rawget(rawget(self,"_internal_var_"),"DrawingObject")[index] = value
+                            if rawget(rawget(self,"_internal_var_"),"DrawingObject2")[index] then
+                                rawget(rawget(self,"_internal_var_"),"DrawingObject2")[index] = value
+                            end
                         end
                     end
                 end,
