@@ -1,6 +1,5 @@
 assert(rconsoleinfo, 'exploit not supported')
 assert(Drawing, 'exploit not supported')
-
 local s,e = pcall(function()
     error("")
 end)
@@ -100,7 +99,7 @@ local err, return_result = pcall(function()
         self._internal_var_ = {
             lock = true
         }
-
+        self._internal_event_ = {}
         local Parent = Parent or DrawUI.Screen
         if not tostring(Parent):find("Custom_UI_Library_Object_From_Draw_Library(") then
             Parent = DrawUI.Screen
@@ -125,6 +124,7 @@ local err, return_result = pcall(function()
             self.Transparency = 1
 
             if self.ClassName ~= "Line" then
+                The_Slient_Library.Custom_Functions.print("Not Line")
                 self._internal_event_.MouseEvent = {
                     MouseButton1Down = Instance.new("BindableEvent"),
                     MouseButton1Up = Instance.new("BindableEvent"),
