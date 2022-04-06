@@ -173,7 +173,7 @@ local err, return_result = pcall(function()
                                     self._internal_event_.MouseEvent[index]:Fire(mouse.x, mouse.y)
                                 end
                             end
-                            if IsMouseOverDrawing(rawget(self,"_internal_var_")["DrawingObject2"]) and .Visible then
+                            if IsMouseOverDrawing(rawget(self,"_internal_var_")["DrawingObject2"]) and rawget(self,"_internal_var_")["DrawingObject2"].Visible then
                                 self._internal_event_.MouseEvent[index]:Fire(mouse.x, mouse.y)
                             end
                         end)
@@ -191,7 +191,7 @@ local err, return_result = pcall(function()
                                         self._internal_event_.MouseEvent[index]:Fire(...)
                                     end
                                 end
-                                if IsMouseOverDrawing(rawget(self,"_internal_var_")["DrawingObject2"]) and .Visible then
+                                if IsMouseOverDrawing(rawget(self,"_internal_var_")["DrawingObject2"]) and rawget(self,"_internal_var_")["DrawingObject2"].Visible then
                                     self._internal_event_.MouseEvent[index]:Fire(...)
                                 end
                             end)
