@@ -51,12 +51,12 @@ tostring = function(input)
 end
 print = function(...)
     local args = {...}
-    local buffer = buffer.new()
+    local printbuffer = buffer.new()
     for i=1, #args do
-        buffer:Write(args[i])
-        buffer:Write("\t")
+        printbuffer:Write(args[i])
+        printbuffer:Write("\t")
     end
-    rconsoleinfo(buffer:Read())
+    rconsoleinfo(printbuffer:Read())
 end
 
 function findvalue_in_table(value,tb)
