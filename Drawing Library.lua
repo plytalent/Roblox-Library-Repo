@@ -69,7 +69,7 @@ local err, return_result = pcall(function()
     end
 
     setmetatable(DrawUI.Screen,{
-        _index = function(self,index)
+        __index = function(self,index)
             if index ~= "_internal_var_" and rawget(rawget(self,"_internal_var_"),"lock") then
                 local valuefromindex = rawget(self,index)
                 if valuefromindex then
@@ -77,21 +77,21 @@ local err, return_result = pcall(function()
                 end
             end
         end,
-        _newindex  == function(self,index,value)
+        __newindex  == function(self,index,value)
         end,
-        _tostring = function()
+        __tostring = function()
             return "Custom_UI_Library_Object_From_Draw_Library(Screen)" 
         end,
-        _unm = function()end,
-        _add = function() end,
-        _sub = function() end,
-        _mul = function() end,
-        _div = function() end,
-        _mod = function() end,
-        _pow = function() end,
-        _eq = function() end,
-        _lt = function() end,
-        _le = function() end
+        __unm = function()end,
+        __add = function() end,
+        __sub = function() end,
+        __mul = function() end,
+        __div = function() end,
+        __mod = function() end,
+        __pow = function() end,
+        __eq = function() end,
+        __lt = function() end,
+        __le = function() end
     })
     function DrawUI.new(UIClass, Parent)
         local self = {}
@@ -222,7 +222,7 @@ local err, return_result = pcall(function()
             end
 
             self = setmetatable(self,{
-                _index = function(self,index)
+                __index = function(self,index)
                     print(The_Slient_Library.Custom_Functions.tostring(self),index)
                     if index ~= "_internal_var_" and rawget(rawget(self,"_internal_var_"),"lock") then
                         local valuefromindex = rawget(self,index) or rawget(self,"_internal_var_")["DrawingObject"][index]
@@ -242,7 +242,7 @@ local err, return_result = pcall(function()
                         end
                     end
                 end,
-                _newindex  == function(self,index,value)
+                __newindex  == function(self,index,value)
                     print(The_Slient_Library.Custom_Functions.tostring(self),index,value)
                     if index ~= "ClassName" and index ~= "TextBounds" and not (index == "_internal_var_" and rawget(rawget(self,"_internal_var_"),"lock")) then
                         if self.ClassName == "TextButton" or self.ClassName == "TextLabel" then
@@ -269,19 +269,19 @@ local err, return_result = pcall(function()
                         end
                     end
                 end,
-                _tostring = function()
+                __tostring = function()
                     return "Custom_UI_Library_Object_From_Draw_Library("..self.Name..")" 
                 end,
-                _unm = function()end,
-                _add = function() end,
-                _sub = function() end,
-                _mul = function() end,
-                _div = function() end,
-                _mod = function() end,
-                _pow = function() end,
-                _eq = function() end,
-                _lt = function() end,
-                _le = function() end
+                __unm = function()end,
+                __add = function() end,
+                __sub = function() end,
+                __mul = function() end,
+                __div = function() end,
+                __mod = function() end,
+                __pow = function() end,
+                __eq = function() end,
+                __lt = function() end,
+                __le = function() end
             })
         end
         return self
