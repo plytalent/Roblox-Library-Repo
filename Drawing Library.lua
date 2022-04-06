@@ -245,17 +245,17 @@ local err, return_result = pcall(function()
                     if index ~= "ClassName" and index ~= "TextBounds" and (index == "_internal_var_" and rawget(rawget(self,"_internal_var_"),"lock")) then
                         if self.ClassName == "TextButton" or self.ClassName == "TextLabel" then
                             if index == "Text" then
-                                rawget(rawget(self,"_internal_var_"),"DrawingObject")[index] = value
+                                rawget(self,"_internal_var_").DrawingObject[index] = value
                                 return
                             elseif index == "ZIndex" then
-                                rawget(rawget(self,"_internal_var_"),"DrawingObject")[index] = value
-                                rawget(rawget(self,"_internal_var_"),"DrawingObject2")[index] = rawget(rawget(self,"_internal_var_"),"DrawingObject")[index] - 1 
+                                rawget(self,"_internal_var_").DrawingObject[index] = value
+                                rawget(self,"_internal_var_").DrawingObject2[index] = rawget(self,"_internal_var_").DrawingObject[index] - 1 
                                 return
                             elseif index == "BackgroundColor" then
-                                rawget(rawget(self,"_internal_var_"),"DrawingObject2")["Color"] = value
+                                rawget(self,"_internal_var_").DrawingObject2.Color = value
                                 return
                             elseif index == "BackgroundTransparency" then
-                                rawget(rawget(self,"_internal_var_"),"DrawingObject2")["Transparency"] = value
+                                rawget(self,"_internal_var_").DrawingObject2.Transparency = value
                                 return
                             end
                         else
@@ -263,10 +263,7 @@ local err, return_result = pcall(function()
                                 rawset(self.Parent,self.Name,self)
                             end
                             rawset(self,index,value)
-                            rawget(rawget(self,"_internal_var_"),"DrawingObject")[index] = value
-                            if rawget(rawget(self,"_internal_var_"),"DrawingObject2")[index] then
-                                rawget(rawget(self,"_internal_var_"),"DrawingObject2")[index] = value
-                            end
+                            rawget(self,"_internal_var_").DrawingObject[index] = value
                         end
                     end
                 end,
