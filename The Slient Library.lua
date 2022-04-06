@@ -38,21 +38,21 @@ end
 
 function buffer.new()
     local self = setmetatable({},buffer)
-    self.Buffer = {}
+    self.buffer = {}
+	function self:Read()
+        local newstr = ""
+        for i=1,#self.buffer do
+            newstr = newstr.. tostring(self.buffer[i])
+        end
+        return newstr
+    end
+    function self:Write(data)
+        self.buffer[#self.buffer+1] = data
+    end
     return self
 end
 
-function buffer:Read()
-    local newstr = ""
-    for i=1,#self.buffer do
-        newstr = newstr.. tostring(self.buffer[i])
-    end
-    return newstr
-end
 
-function buffer:Write(data)
-    self.buffer[#self.buffer+1] = data
-end
 
 function scheduler.new()
     local self = setmetatable({},scheduler)
@@ -90,32 +90,32 @@ function scheduler.new()
     end
     self._internal_func_.bindtoloop()
     debug("[Scheduler]", "[", self._internal_var_.RandomString, "]", "Initialized")
+    function self:Add_Func(self,func,args)
+        debug("[Scheduler]", "[", self._internal_var_.RandomString, "]", "Add Function To scheduler")
+        self.funcs[#self.funcs+1] = func
+    end
+    function self:Remove_Func(self,func)
+        for index=1, #self.funcs do
+            if self.funcs[index] == func then
+                debug("[Scheduler]", "[", self._internal_var_.RandomString, "]", "Remove Function From scheduler")
+                self.funcs[index] = nil
+            end
+        end
+    end
+    function self:Switch_Event(ev)
+        if not ev then
+            debug("[Scheduler]", "[", self._internal_var_.RandomString, "]", "Switching Event Scheduler")
+            self._internal_event_.MainEventLoop:Disconnect()
+            self._internal_var_.Changing_event = true
+            while self._internal_var_.Executed_Function do
+                self.loop:Wait()
+            end
+            self._internal_var_.Changing_event = false
+            self.loop = ev
+            self._internal_func_.bindtoloop()
+        end
+    end
     return self
-end
-function scheduler:Add_Func(self,func,args)
-    debug("[Scheduler]", "[", self._internal_var_.RandomString, "]", "Add Function To scheduler")
-    self.funcs[#self.funcs+1] = func
-end
-function scheduler:Remove_Func(self,func)
-    for index=1, #self.funcs do
-        if self.funcs[index] == func then
-            debug("[Scheduler]", "[", self._internal_var_.RandomString, "]", "Remove Function From scheduler")
-            self.funcs[index] = nil
-        end
-    end
-end
-function scheduler:Switch_Event(ev)
-    if not ev then
-        debug("[Scheduler]", "[", self._internal_var_.RandomString, "]", "Switching Event Scheduler")
-        self._internal_event_.MainEventLoop:Disconnect()
-        self._internal_var_.Changing_event = true
-        while self._internal_var_.Executed_Function do
-            self.loop:Wait()
-        end
-        self._internal_var_.Changing_event = false
-        self.loop = ev
-        self._internal_func_.bindtoloop()
-    end
 end
 
 tostring = function(input)
