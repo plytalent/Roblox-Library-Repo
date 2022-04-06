@@ -64,7 +64,7 @@ module = {
 		local libraryloaded = cache[url]
 	        if not libraryloaded or libraryloaded ~= "" then
 		    cache[url] = module.ExternalLoad(url)
-		    print(module.ExternalLoad(url) or "No Module Load")
+		    print(module.ExternalLoad(url) or "No Module Load!")
 		    libraryloaded = cache[url]
 		end
 		if libraryloaded ~= nil then
