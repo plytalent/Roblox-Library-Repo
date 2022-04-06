@@ -17,15 +17,10 @@ end
 local RequireLibrary = loadstring(RequireLibraryCode)().Load
 local The_Slient_Library = RequireLibrary("The Slient Library")
 local err, return_result = pcall(function()
+    local Scheduler = The_Slient_Library.scheduler.new()
     local player = game:GetService("Players").LocalPlayer
     local mouse = player:GetMouse()
     local UserInputService = game:GetService("UserInputService")
-    local ODrawingSynX = {}
-    local DrawUIold = {
-        mouse_down = false,
-        drawinglist = {},
-        mouse_down_funcs = {}
-    }
 
     local DrawUI = {
         Screen = {
@@ -39,6 +34,16 @@ local err, return_result = pcall(function()
         }
     }
 
+    function UpdateProperty()
+        for _, drawingobject in pairs(DrawUI.Screen) do
+            for i,value in pairs(drawingobject) do
+                pcall(function()
+                    rawget(drawingobject,"_internal_var_").DrawingObject[i] = value
+                end)
+            end
+        end
+    end
+    Scheduler:Add_Func(UpdateProperty)
     function GetMouseLocation()
     	return UserInputService:GetMouseLocation();
     end
@@ -101,7 +106,7 @@ local err, return_result = pcall(function()
         }
         self._internal_event_ = {}
         local Parent = Parent or DrawUI.Screen
-        if not tostring(Parent):find("Custom_UI_Library_Object_From_Draw_Library(") then
+        if not tostring(Parent):find("Custom_UI_Library_Object_From_Draw_Library") then
             Parent = DrawUI.Screen
         end
         self.Parent = Parent
