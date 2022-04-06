@@ -64,12 +64,13 @@ module = {
 		local libraryloaded = cache[url]
 	        if not libraryloaded or libraryloaded ~= "" then
 		    cache[url] = module.ExternalLoad(url)
+		    print(module.ExternalLoad(url))
 		    libraryloaded = cache[url]
 		end
 		if libraryloaded ~= nil then
                     return libraryloaded
 		else
-		    print("NO LIBRARY LOADED")
+		    print("No Library Loaded")
 		end
             else
                 rconsoleinfo("NOT FOUND MODULE")
