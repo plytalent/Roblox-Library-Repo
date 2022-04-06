@@ -246,13 +246,17 @@ local err, return_result = pcall(function()
                         if self.ClassName == "TextButton" or self.ClassName == "TextLabel" then
                             if index == "Text" then
                                 rawget(rawget(self,"_internal_var_"),"DrawingObject")[index] = value
+                                return
                             elseif index == "ZIndex" then
                                 rawget(rawget(self,"_internal_var_"),"DrawingObject")[index] = value
                                 rawget(rawget(self,"_internal_var_"),"DrawingObject2")[index] = rawget(rawget(self,"_internal_var_"),"DrawingObject")[index] - 1 
+                                return
                             elseif index == "BackgroundColor" then
                                 rawget(rawget(self,"_internal_var_"),"DrawingObject2")["Color"] = value
+                                return
                             elseif index == "BackgroundTransparency" then
                                 rawget(rawget(self,"_internal_var_"),"DrawingObject2")["Transparency"] = value
+                                return
                             end
                         else
                             if index == "Parent" then
