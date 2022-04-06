@@ -1,5 +1,6 @@
 local print = rconsoleinfo or print
 local module
+local cache = {}
 
 function findvalue_in_table(value,tb)
     for _,v in pairs(tb) do
@@ -35,10 +36,15 @@ module = {
     end,
     ExternalLoad = function(url)
         local url = url or ""
-        local LibraryContent = gethttp(url)
-        if LibraryContent == "ERROR" then
-            print("[Library Loader][URL Loader]FAILED TO LOAD EXTERNAL LIB"..LibraryContent)
-            return
+	if not cache[url] or cache[url] ~= "" then
+            local LibraryContent = gethttp(url)
+            if LibraryContent == "ERROR" then
+                print("[Library Loader][URL Loader]FAILED TO LOAD EXTERNAL LIB"..LibraryContent)
+                return
+            end
+	    cache[url] = LibraryContent
+	else
+	    LibraryContent = cache[url]
         end
         local n_er, Library = pcall(function()
             return loadstring(LibraryContent)()
