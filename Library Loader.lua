@@ -12,16 +12,16 @@ local buffer = {}
 
 function buffer.new()
     local self = setmetatable({},buffer)
-    self.Buffer = {}
+    self.buffer = {}
     function self:Read()
         local newstr = ""
-        for i=1,#self.Buffer do
-            newstr = newstr.. tostring(self.Buffer[i])
+        for i=1,#self.buffer do
+            newstr = newstr.. tostring(self.buffer[i])
         end
         return newstr
     end
     function self:Write(data)
-        self.Buffer[#self.Buffer+1] = data
+        self.buffer[#self.buffer+1] = data
     end
     return self
 end
@@ -150,7 +150,7 @@ module = {
             makefolder("module")
         end
         local modules = listfiles("module")
-        if findvalue_in_table("module\\"modulename,modules) then
+        if findvalue_in_table("module\\"..modulename..".lua",modules) then
             return module.LocalLoad("module\\"..modulename..".lua")
         else
             print("[Library Loader]Loading From https://raw.githubusercontent.com/plytalent/Roblox-Library-Repo/main/"..modulename:gsub("%s+","%%20")..".lua")
