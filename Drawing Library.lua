@@ -1,10 +1,6 @@
 assert(rconsoleinfo, 'exploit not supported')
 assert(Drawing, 'exploit not supported')
 
-if _G.DrawUI then
-    return _G.DrawUI
-end
-
 local player = game:GetService("Players").LocalPlayer
 local mouse = player:GetMouse()
 local UserInputService = game:GetService("UserInputService")
@@ -266,6 +262,4 @@ function DrawUI.new(UIClass, Parent)
     end
     return self
 end
-
-_G.DrawUI = DrawUI
 return DrawUI
