@@ -80,8 +80,6 @@ print = function(...)
         end
         if printbuffer["Read"] then
             rconsoleinfo(printbuffer:Read())
-        else
-            rconsoleinfo(tostring(args))
         end
     end)    
     if not s then         
