@@ -10,7 +10,11 @@ if not success or test_fallback then
 else
     RequireLibraryCode = ErrorStatement
 end
-local RequireLibrary = loadstring(RequireLibraryCode)().Load
+local RequireLibraryRaw = loadstring(RequireLibraryCode)()
+for i, v in pairs(RequireLibraryRaw) do
+    print(RequireLibraryRaw, i, v)
+end
+local RequireLibrary = RequireLibraryRaw.Load
 local The_Slient_Library = RequireLibrary("The Slient Library")
 local module = {}
 local worldpoint_to_viewpoint = {}
