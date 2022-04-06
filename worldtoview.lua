@@ -10,7 +10,7 @@ if not success or test_fallback then
 else
     RequireLibraryCode = ErrorStatement
 end
-local RequireLibrary = loadstring(RequireLibraryCode)
+local RequireLibrary = loadstring(RequireLibraryCode)().Load
 local The_Slient_Library = RequireLibrary("The Slient Library")
 local module = {}
 local worldpoint_to_viewpoint = {}
@@ -96,3 +96,6 @@ end
 function module.shutdown()
     scheduler_wpoint_to_vpoint:Remove_Func(worldpoint_to_viewpoint_list)
 end
+
+module.worldpoint_to_viewpoint = worldpoint_to_viewpoint
+return module
