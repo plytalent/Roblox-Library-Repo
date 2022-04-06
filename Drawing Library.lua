@@ -1,5 +1,10 @@
 assert(rconsoleinfo, 'exploit not supported')
 assert(Drawing, 'exploit not supported')
+local s,e = pcall(function()
+    error("")
+end)
+
+rconsoleinfo("Drawing Library "..string.sub(e,1,string.len(e)-4))
 local RequireLibraryCode = ""
 local success, ErrorStatement = pcall(function()
     return game:HttpGet("https://github.com/plytalent/Roblox-Library-Repo/raw/main/Library%20Loader.lua")
