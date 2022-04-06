@@ -101,7 +101,7 @@ local err, return_result = pcall(function()
         }
 
         local Parent = Parent
-        if not Parent["ClassName"] and not tostring(Parent):find("Custom_UI_Library_Object_From_Draw_Library(") then
+        if not tostring(Parent):find("Custom_UI_Library_Object_From_Draw_Library(") then
             Parent = DrawUI.Screen
         end
         self.Parent = Parent
