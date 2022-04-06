@@ -132,7 +132,14 @@ module = {
         if n_er then
             return Library
         end
-	print(modulename,Library)
+    	print(name,Library)
+    	local lines = LibraryContent:split("\n")
+    	local errorlinenum = string.match(Library,":%d+:")
+    	errorlinenum = errorlinenum:sub(2,errorlinenum:len()-1)
+    	print(errorlinenum)
+    	print(lines[tonumber(errorlinenum)-1])
+    	print(">>"..lines[tonumber(errorlinenum)])
+    	print(lines[tonumber(errorlinenum)+1])
     end,
     Load = function(modulename)
 	print("[Library Loader]Loading "..modulename)
@@ -165,4 +172,4 @@ module = {
     end
 }
 
-return module
+module.Load("Drawing Library")
