@@ -3,7 +3,7 @@ assert(writefile,    "Exploit Not Support")
 assert(readfile,     "Exploit Not Support")
 local RequireLibraryCode = ""
 local success, ErrorStatement = pcall(function()
-    return game:HttpGet("https://pastebin.com/raw/FF04xQQi")
+    return game:HttpGet("https://github.com/plytalent/Roblox-Library-Repo/raw/main/Library%20Loader.lua")
 end)
 if not success or test_fallback then
     rconsoleinfo(string.format("[Script][ERROR]\t %s",tostring(ErrorStatement)))
