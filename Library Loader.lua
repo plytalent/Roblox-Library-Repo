@@ -167,4 +167,4 @@ module = {
     end
 }
 
-module.Load("The Slient Library")
+return module.Load
