@@ -19,7 +19,7 @@ local The_Slient_Library = RequireLibrary("The Slient Library")
 local module = {}
 local worldpoint_to_viewpoint = {}
 local currentcamera = workspace.CurrentCamera
-local scheduler_wpoint_to_vpoint = The_Slient_Lib.scheduler.new()
+local scheduler_wpoint_to_vpoint = The_Slient_Library.scheduler.new()
 --[[
 The_Slient_Library.scheduler
 
