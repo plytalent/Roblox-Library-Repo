@@ -4,6 +4,8 @@ local cache = {}
 local tostring
 local print
 
+local buffer = {}
+
 function buffer.new()
     local self = setmetatable({},buffer)
     self.Buffer = {}
