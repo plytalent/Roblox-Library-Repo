@@ -66,7 +66,9 @@ module = {
 		    cache[url] = module.ExternalLoad(url)
 		    libraryloaded = cache[url]
 		end
-                return libraryloaded
+		if libraryloaded ~= nil then
+                    return libraryloaded
+		end
             else
                 rconsoleinfo("NOT FOUND MODULE")
             end
