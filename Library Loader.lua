@@ -1,7 +1,9 @@
 local module
 local cache = {}
-
+local real_print = print
+local real_tostring = tostring
 local tostring
+local tostringnobuf
 local print
 
 local buffer = {}
@@ -9,21 +11,38 @@ local buffer = {}
 function buffer.new()
     local self = setmetatable({},buffer)
     self.Buffer = {}
+    function self:Read()
+        local newstr = ""
+        for i=1,#self.Buffer do
+            newstr = newstr.. tostring(self.Buffer[i])
+        end
+        return newstr
+    end
+    function self:Write(data)
+        self.Buffer[#self.Buffer+1] = data
+    end
     return self
 end
 
-function buffer:Read()
-    local newstr = ""
-    for i=1,#self.buffer do
-        newstr = newstr.. tostring(self.buffer[i])
+tostringnobuf = function(input)
+    local typeofinput = typeof(input):lower()
+    if typeofinput == "instance" or typeofinput == "userdata" then
+        local can_get_name, name = pcall(function()
+            return input.Name
+        end)
+        if can_get_name then
+            return tostring(name)
+        end
+    elseif typeofinput == "table" then
+        local newbuffer = ""
+        for index,value in pairs(input) do
+            newbuffer = newbuffer .. index .. " = ".. tostring(value) .. ",\n"
+        end
+        newbuffer = "{\n"..newbuffer.."}"
+        return newbuffer
     end
-    return newstr
+    return real_tostring(input)
 end
-
-function buffer:Write(data)
-    self.buffer[#self.buffer+1] = data
-end
-
 tostring = function(input)
     local typeofinput = typeof(input):lower()
     if typeofinput == "instance" or typeofinput == "userdata" then
@@ -47,16 +66,27 @@ tostring = function(input)
         newbuffer:Write("}")
         return newbuffer:Read()
     end
-    return real_func["tostring"](input)
+    return real_tostring(input)
 end
 print = function(...)
     local args = {...}
-    local printbuffer = buffer.new()
-    for i=1, #args do
-        printbuffer:Write(args[i])
-        printbuffer:Write("\t")
+    local s, e = pcall(function()
+        local printbuffer = buffer.new()
+        if printbuffer["Write"] then
+            for i=1, #args do
+                printbuffer:Write(args[i])
+                printbuffer:Write("\t")
+            end
+        end
+        if printbuffer["Read"] then
+            rconsoleinfo(printbuffer:Read())
+        else
+            rconsoleinfo(tostring(args))
+        end
+    end)    
+    if not s then         
+        rconsoleinfo("[Print Error]".. e)
     end
-    rconsoleinfo(printbuffer:Read())
 end
 
 function findvalue_in_table(value,tb)
@@ -136,4 +166,5 @@ module = {
         end
     end
 }
-return module
+
+module.Load("The Slient Library")
