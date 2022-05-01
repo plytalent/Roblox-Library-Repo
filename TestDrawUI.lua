@@ -127,10 +127,8 @@ function module:Destroy(self)
     self.Destroy = true
     pcall(function()
         self.raw_ui.Transparency = 0
-        self.raw_ui2.Transparency = 0
-    end)
-    pcall(function()
         self.raw_ui:Remove()
+        self.raw_ui2.Transparency = 0
         self.raw_ui2:Remove()
     end)
 end
