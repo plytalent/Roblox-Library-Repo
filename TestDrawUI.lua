@@ -44,7 +44,7 @@ local Look_Up_Property_Compatibility={
     },
     ["Krnl"] = {
         Transparency = "Transparency",
-        OutlineColor = "OutlineColor"
+        OutlineColor = "OutlineColor",
         TextBounds   = "TextBounds",
         Thickness    = "Thickness",
         Position     = "Position",
