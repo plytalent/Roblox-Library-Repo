@@ -64,7 +64,7 @@ local Look_Up_Property_Compatibility={
     }
 }
 
-local RenderUpdateThread == coroutine.wrap(function()
+local RenderUpdateThread = coroutine.wrap(function()
     local skippedrender = false
     function UpdateProperty(object)
         pcall(function()
